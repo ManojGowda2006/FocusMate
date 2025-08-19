@@ -21,58 +21,61 @@ Users run timed focus sessions with short/long breaks, attach sessions to tasks,
 ## 3. Codebase Structure
 
 ### 3.1 Frontend (React)
-src/
- ├── components/
- │    ├── Navbar.jsx
- │    ├── AuthForm.jsx
- │    ├── TaskList.jsx
- │    ├── TaskCard.jsx
- │    ├── PomodoroTimer.jsx
- │    ├── Dashboard.jsx
- │    └── AnalyticsChart.jsx
- │
- ├── pages/
- │    ├── Landing.jsx
- │    ├── Login.jsx
- │    ├── Signup.jsx
- │    ├── Dashboard.jsx
- │    └── Settings.jsx
- │
- ├── context/
- │    └── AuthContext.jsx
- │
- ├── services/
- │    └── api.js   // axios instance for backend calls
- │
- ├── utils/
- │    └── timer.js // helper for timer persistence
- │
- └── App.jsx
+
+```bash
+  src/
+  ├── components/
+  │    ├── Navbar.jsx
+  │    ├── AuthForm.jsx
+  │    ├── TaskList.jsx
+  │    ├── TaskCard.jsx
+  │    ├── PomodoroTimer.jsx
+  │    ├── Dashboard.jsx
+  │    └── AnalyticsChart.jsx
+  │
+  ├── pages/
+  │    ├── Landing.jsx
+  │    ├── Login.jsx
+  │    ├── Signup.jsx
+  │    ├── Dashboard.jsx
+  │    └── Settings.jsx
+  │
+  ├── context/
+  │    └── AuthContext.jsx
+  │
+  ├── services/
+  │    └── api.js   // axios instance for backend calls
+  │
+  ├── utils/
+  │    └── timer.js // helper for timer persistence
+  │
+  └── App.jsx
 
 ### 3.2 Backend (Node.js + Express)
-backend/
- ├── models/
- │    ├── User.js
- │    └── Task.js
- │
- ├── routes/
- │    ├── authRoutes.js
- │    ├── taskRoutes.js
- │    └── pomodoroRoutes.js
- │
- ├── controllers/
- │    ├── authController.js
- │    ├── taskController.js
- │    └── pomodoroController.js
- │
- ├── middleware/
- │    └── authMiddleware.js
- │
- ├── config/
- │    └── db.js
- │
- └── server.js
+    backend/
+    ├── models/
+    │    ├── User.js
+    │    └── Task.js
+    │
+    ├── routes/
+    │    ├── authRoutes.js
+    │    ├── taskRoutes.js
+    │    └── pomodoroRoutes.js
+    │
+    ├── controllers/
+    │    ├── authController.js
+    │    ├── taskController.js
+    │    └── pomodoroController.js
+    │
+    ├── middleware/
+    │    └── authMiddleware.js
+    │
+    ├── config/
+    │    └── db.js
+    │
+    └── server.js
 
+```
 ---
 
 ## 4. Module Breakdown
