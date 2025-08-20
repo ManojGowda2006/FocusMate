@@ -168,25 +168,46 @@ const QuickStartSection = ({ onStart, onManageTasks }) => (
   </section>
 );
 
-const TodaysTasksSection = ({ completed, total }) => (
-  <section aria-labelledby="today-tasks-title" className="rounded-xl bg-gray-800/50 backdrop-blur border border-gray-700 p-6 hover:bg-gray-800/70 transition-all duration-300">
+const TodaysTasksSection = ({tasks, completed, total }) => (
+  <section
+    aria-labelledby="today-tasks-title"
+    className="rounded-xl bg-gray-800/50 backdrop-blur border border-gray-700 p-6 hover:bg-gray-800/70 transition-all duration-300"
+  >
     <div className="flex items-start justify-between mb-2">
       <h2 id="today-tasks-title" className="text-xl font-bold text-white">
         📋 Today's Tasks
       </h2>
-      <span className="text-sm text-gray-400 bg-gray-700/50 px-2 py-1 rounded-full">{completed}/{total} completed</span>
+      <span className="text-sm text-gray-400 bg-gray-700/50 px-2 py-1 rounded-full">
+        {completed}/{total} completed
+      </span>
     </div>
 
-    <div className="mt-8 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-600 p-8 text-center hover:border-gray-500 transition-colors duration-200">
-      <FiCheckCircle className="h-12 w-12 text-gray-500" aria-hidden="true" />
-      <p className="mt-4 text-white font-medium">No tasks for today</p>
-      <a
-        href="#"
-        className="mt-2 text-sm text-blue-400 hover:text-blue-300 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
-      >
-        Add your first task
-      </a>
-    </div>
+    {total === 0 ? (
+      <div className="mt-8 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-600 p-8 text-center hover:border-gray-500 transition-colors duration-200">
+        <FiCheckCircle className="h-12 w-12 text-gray-500" aria-hidden="true" />
+        <p className="mt-4 text-white font-medium">No tasks for today</p>
+        <a
+          href="#"
+          className="mt-2 text-sm text-blue-400 hover:text-blue-300 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
+        >
+          Add your first task
+        </a>
+      </div>
+    ) : (
+      <ul className="mt-6 space-y-3">
+        {tasks.map((task) => (
+          <li
+            key={task._id}
+            className="flex items-center gap-3 p-3 rounded-lg bg-gray-700/30 hover:bg-gray-700/50 transition-colors duration-200"
+          >
+            <input type="checkbox" checked={task.completed} readOnly />
+            <span className={`text-white ${task.completed ? "line-through text-gray-400" : ""}`}>
+              {task.title}
+            </span>
+          </li>
+        ))}
+      </ul>
+    )}
   </section>
 );
 
@@ -328,6 +349,31 @@ const Dashboard = () => {
     fetchStats();
   },[]);
 
+  const [tasks, setTasks] = useState([]); 
+
+  useEffect(() => {
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/tasks`, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        const today = new Date().toISOString().split("T")[0]; // e.g. "2025-08-20"
+        const todaysTasks = res.data.filter((task) => {
+          const createdDate = new Date(task.createdAt).toISOString().split("T")[0];
+          return createdDate === today;
+        });
+        setTasks(todaysTasks);
+      }
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
+  };
+
+  fetchTasks();
+  }, []);
+
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[var(--page-fg)]">
       {/* Background elements */}
@@ -377,7 +423,13 @@ const Dashboard = () => {
                   <QuickStartSection
                     onStart={() => navigate("/timer")}
                   />
-                  <TodaysTasksSection completed={completedTasks} total={totalTasks} />
+                  <TodaysTasksSection
+                    tasks={tasks}
+                    completed={tasks.filter((t) => t.status === "completed").length}
+                    total={tasks.length}
+                  />
+
+
                 </div>
                 <div>
                   <TeamActivitySection team={team} />

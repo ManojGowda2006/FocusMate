@@ -2,6 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiHome, FiClock, FiCheckSquare, FiBarChart2, FiUsers, FiSettings, FiLogOut, FiUpload } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext.jsx';
+import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL ;
+const CLOUDINARY_API = import.meta.env.VITE_CLOUDINARY_URL;
 
 const SETTINGS_KEY = 'focusmate_settings_v1';
 const PROFILE_KEY = 'focusmate_profile_v1';
@@ -101,36 +104,75 @@ const Settings = () => {
 
   useEffect(() => {
     // keep in sync if AuthContext changes mid-session
-    if (user) {
-      setName((n) => n || user.name || '');
-      setEmail((e) => e || user.email || '');
-    }
+     const fetchUser = async () => {
+      const res = await axios.get(`${API_URL}/user`, { withCredentials: true });
+      if (res.status === 200) {
+        console.log("User fetched successfully:", res.data);
+        setName(res.data.name);
+        setEmail(res.data.email);
+        setImage(res.data.image);
+      }
+     }
+     fetchUser();   
   }, [user]);
 
-  const onImageChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setImage(reader.result?.toString() || '');
-    reader.readAsDataURL(file);
-  };
 
-  const onSave = async (e) => {
-    e.preventDefault();
-    setSaving(true);
+
+  const handleImageUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "profile_pictures");
+    formData.append("folder", "ProfilePictures");
+
     try {
-      // Persist profile and settings
-      writeJSON(PROFILE_KEY, { name, email, image });
-      writeJSON(SETTINGS_KEY, { focusDefault, breakDefault, enableSound });
-      // Update auth context (mock)
-      if (email) {
-        if (name) await signup({ name, email }); else await login({ email });
-      }
-      setSavedAt(new Date());
-    } finally {
-      setSaving(false);
+      const res = await axios.post(
+        `${CLOUDINARY_API}`,
+        formData
+      );
+      setImage(res.data.secure_url );
+    } catch (err) {
+      console.error("Image upload failed", err);
     }
   };
+
+const onImageChange = async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    setSaving(true);
+    const url = await handleImageUpload(file);
+    setImage(url); // update state with hosted Cloudinary URL
+  } catch (err) {
+    console.error("Image upload failed:", err);
+  } finally {
+    setSaving(false);
+  }
+};
+
+
+
+
+const onSave = async (e) => {
+  e.preventDefault();
+  setSaving(true);
+  try {
+    const payload = { name, email, image }
+
+    // Save to backend
+    await axios.post(`${API_URL}/user`, payload, { withCredentials: true });
+
+    // Also persist locally if you want
+    writeJSON(PROFILE_KEY, payload.profile);
+    writeJSON(SETTINGS_KEY, payload.settings);
+
+    setSavedAt(new Date());
+  } catch (err) {
+    console.error("Save failed:", err);
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[var(--page-fg)]">
@@ -153,7 +195,7 @@ const Settings = () => {
               <h2 className="text-xl font-semibold text-white mb-4">Profile</h2>
               <div className="flex flex-col items-center gap-4">
                 <div className="relative">
-                  <img src={image || 'https://api.dicebear.com/7.x/avataaars/svg?seed=You'} alt="Profile" className="h-24 w-24 rounded-full object-cover border border-gray-700" />
+                  <img src={image && image} alt="Profile" className="h-24 w-24 rounded-full object-cover border border-gray-700" />
                 </div>
                 <label className="inline-flex items-center gap-2 cursor-pointer text-sm text-gray-300">
                   <FiUpload className="h-4 w-4" />

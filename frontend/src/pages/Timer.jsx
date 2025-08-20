@@ -14,6 +14,8 @@ import {
   FiRefreshCw,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL
 
 // Presets (in minutes)
 const FOCUS_PRESETS = [25, 30, 45, 60];
@@ -25,13 +27,13 @@ const Timer = () => {
   // Selected durations (minutes) - initialize from Settings if present
   const [focusMinutes, setFocusMinutes] = useState(() => {
     try {
-      const s = JSON.parse(localStorage.getItem('focusmate_settings_v1') || '{}');
-      return Number(s.focusDefault) || 25;
+      const s = JSON.parse(localStorage.getItem('focusmate_settings_v1'));
+      return Number(s.timeLeft) || 25;
     } catch { return 25; }
   });
   const [breakMinutes, setBreakMinutes] = useState(() => {
     try {
-      const s = JSON.parse(localStorage.getItem('focusmate_settings_v1') || '{}');
+      const s = JSON.parse(localStorage.getItem('focusmate_settings_v1'));
       return Number(s.breakDefault) || 5;
     } catch { return 5; }
   });
@@ -39,8 +41,8 @@ const Timer = () => {
   // Core timer state
   const [timeLeft, setTimeLeft] = useState(() => {
     try {
-      const s = JSON.parse(localStorage.getItem('focusmate_settings_v1') || '{}');
-      return (Number(s.focusDefault) || 25) * 60;
+      const s = JSON.parse(localStorage.getItem('focusmate_settings_v1'));
+      return (Number(s.timeLeft) || 25) * 60;
     } catch { return 25 * 60; }
   }); // seconds
   const [isRunning, setIsRunning] = useState(false);
@@ -51,77 +53,117 @@ const Timer = () => {
   const [totalFocusTime, setTotalFocusTime] = useState(0); // minutes
   const [currentStreak, setCurrentStreak] = useState(0);
 
-  // Load persisted state
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const saved = JSON.parse(raw);
-        if (typeof saved.focusMinutes === 'number') setFocusMinutes(saved.focusMinutes);
-        if (typeof saved.breakMinutes === 'number') setBreakMinutes(saved.breakMinutes);
-        if (typeof saved.timeLeft === 'number') setTimeLeft(saved.timeLeft);
-        else setTimeLeft((saved.mode === 'break' ? (saved.breakMinutes || 5) : (saved.focusMinutes || 25)) * 60);
-        if (typeof saved.isRunning === 'boolean') setIsRunning(saved.isRunning);
-        if (saved.mode === 'focus' || saved.mode === 'break') setMode(saved.mode);
-        if (typeof saved.sessionsToday === 'number') setSessionsToday(saved.sessionsToday);
-        if (typeof saved.totalFocusTime === 'number') setTotalFocusTime(saved.totalFocusTime);
-        if (typeof saved.currentStreak === 'number') setCurrentStreak(saved.currentStreak);
-      }
-    } catch (_) {
-      // ignore parse errors; start fresh
+// Load persisted state
+useEffect(() => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (typeof saved.focusMinutes === 'number') setFocusMinutes(saved.focusMinutes);
+      if (typeof saved.breakMinutes === 'number') setBreakMinutes(saved.breakMinutes);
+      if (typeof saved.timeLeft === 'number') setTimeLeft(saved.timeLeft);
+      else setTimeLeft((saved.mode === 'break' ? (saved.breakMinutes || 5) : (saved.focusMinutes || 25)) * 60);
+      if (typeof saved.isRunning === 'boolean') setIsRunning(saved.isRunning);
+      if (saved.mode === 'focus' || saved.mode === 'break') setMode(saved.mode);
+      if (typeof saved.sessionsToday === 'number') setSessionsToday(saved.sessionsToday);
+      if (typeof saved.totalFocusTime === 'number') setTotalFocusTime(saved.totalFocusTime);
+      if (typeof saved.currentStreak === 'number') setCurrentStreak(saved.currentStreak);
     }
-  }, []);
+  } catch (_) {
+    // ignore parse errors; start fresh
+  }
+}, []);
 
-  // Persist state
-  useEffect(() => {
-    const payload = {
-      focusMinutes,
-      breakMinutes,
-      timeLeft,
-      isRunning,
-      mode,
-      sessionsToday,
-      totalFocusTime,
-      currentStreak,
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-  }, [focusMinutes, breakMinutes, timeLeft, isRunning, mode, sessionsToday, totalFocusTime, currentStreak]);
+// Persist state
+useEffect(() => {
+  const payload = {
+    focusMinutes,
+    breakMinutes,
+    timeLeft,
+    isRunning,
+    mode,
+    sessionsToday,
+    totalFocusTime,
+    currentStreak,
+    endTime: isRunning ? Date.now() + timeLeft * 1000 : null, // 🔑 save absolute end time
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}, [focusMinutes, breakMinutes, timeLeft, isRunning, mode, sessionsToday, totalFocusTime, currentStreak]);
 
-  // Countdown logic (robust to StrictMode, avoids duplicate intervals)
-  useEffect(() => {
-    if (!isRunning) return;
-    const id = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          // finishing this tick
-          if (mode === 'focus') {
-            // Focus complete -> increment stats and start break
-            setSessionsToday((p) => p + 1);
-            setTotalFocusTime((p) => p + focusMinutes);
-            notify('Focus complete', `Great job! ${breakMinutes}-minute break starting.`, { sound: true });
-            setMode('break');
-            setIsRunning(false);
-            setTimeout(() => {
-              setTimeLeft(breakMinutes * 60);
-              setIsRunning(true);
-            }, 0);
-          } else {
-            // Break complete -> back to focus
-            notify('Break complete', `Back to focus. ${focusMinutes}-minute session starting.`, { sound: true });
-            setMode('focus');
-            setIsRunning(false);
-            setTimeout(() => {
-              setTimeLeft(focusMinutes * 60);
-              setIsRunning(true);
-            }, 0);
-          }
-          return 0;
+
+// Load persisted state with endTime check
+useEffect(() => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+
+    const saved = JSON.parse(raw);
+
+    if (typeof saved.focusMinutes === 'number') setFocusMinutes(saved.focusMinutes);
+    if (typeof saved.breakMinutes === 'number') setBreakMinutes(saved.breakMinutes);
+    if (saved.mode === 'focus' || saved.mode === 'break') setMode(saved.mode);
+    if (typeof saved.sessionsToday === 'number') setSessionsToday(saved.sessionsToday);
+    if (typeof saved.totalFocusTime === 'number') setTotalFocusTime(saved.totalFocusTime);
+    if (typeof saved.currentStreak === 'number') setCurrentStreak(saved.currentStreak);
+
+    // 🔑 Recalculate timeLeft
+    if (saved.isRunning && saved.endTime) {
+      const diff = Math.floor((saved.endTime - Date.now()) / 1000);
+      if (diff > 0) {
+        setTimeLeft(diff);
+        setIsRunning(true);
+      } else {
+        // Session expired while away
+        if (saved.mode === 'focus') {
+          setSessionsToday((p) => p + 1);
+          setTotalFocusTime((p) => p + saved.focusMinutes);
+          setMode('break');
+          setTimeLeft(saved.breakMinutes * 60);
+        } else {
+          setMode('focus');
+          setTimeLeft(saved.focusMinutes * 60);
         }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(id);
-  }, [isRunning, mode, focusMinutes, breakMinutes]);
+        setIsRunning(false);
+      }
+    } else {
+      // Not running → reset to full duration
+      setTimeLeft((saved.mode === 'break' ? saved.breakMinutes : saved.focusMinutes) * 60);
+      setIsRunning(false);
+    }
+  } catch (_) {
+    // ignore parse errors
+  }
+}, []);
+
+
+// Countdown ticking effect
+useEffect(() => {
+  if (!isRunning) return;
+
+  const interval = setInterval(() => {
+    setTimeLeft((prev) => {
+      if (prev > 1) return prev - 1;
+
+      // 🔔 Time's up: switch mode
+      if (mode === "focus") {
+        setSessionsToday((p) => p + 1);
+        setTotalFocusTime((p) => p + focusMinutes);
+        setMode("break");
+        notify("Break time!", `Take ${breakMinutes} minutes to rest.`, { sound: true });
+        return breakMinutes * 60;
+      } else {
+        setMode("focus");
+        notify("Focus time!", `Stay focused for ${focusMinutes} minutes.`, { sound: true });
+        return focusMinutes * 60;
+      }
+    });
+    return 0; // failsafe
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [isRunning, mode, focusMinutes, breakMinutes]);
+
+
 
   // Format time MM:SS
   const formatTime = (seconds) => {
@@ -176,6 +218,53 @@ const Timer = () => {
         ? 'bg-blue-600 text-white'
         : 'border border-gray-600 text-gray-300 hover:bg-gray-800',
     ].join(' ');
+
+  const [stats, setStats] = useState([
+    {
+      id: 'total-time',
+      value: '0'
+    },
+    {
+      id: 'completed-sessions',
+      value: '0'
+    },
+    {
+      id: 'tasks-completed',
+      value: '0'
+    },
+    {
+      id: 'current-streak',
+      value: '0'
+    },
+  ]);
+
+  useEffect(() => {
+    const fetchStats = async() => {
+        const res = await axios.get(`${API_URL}/stats`,{
+          withCredentials: true
+        })
+        const data = res.data; 
+        if(res.status === 200){
+          setStats((prev) =>  prev.map((stat) => {
+            if (stat.id === 'total-time') {
+              return { ...stat, value: `${data.totalFocusTime}` };
+            }
+            if (stat.id === 'completed-sessions') {
+              return { ...stat, value: data.completedSessions.toString() };
+            }
+            if (stat.id === 'tasks-completed') {
+              return { ...stat, value: data.tasksCompleted.toString() };
+            }
+            if (stat.id === 'current-streak') {
+              return { ...stat, value: data.currentStreak.toString() };
+            }
+            return stat;
+          })
+        );
+        }
+    }
+    fetchStats();
+  },[]);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[var(--page-fg)]">
@@ -356,13 +445,13 @@ const Timer = () => {
 
               {/* Focus Time */}
               <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-green-400">{totalFocusTime}m</div>
+                <div className="text-3xl font-bold text-green-400">{stats && stats.find((s) => s.id === "total-time")?.value}m</div>
                 <div className="text-sm text-gray-400">Focus Time</div>
               </div>
 
               {/* Current Streak */}
               <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-orange-400">{currentStreak}</div>
+                <div className="text-3xl font-bold text-orange-400">{stats && stats.find((s) => s.id === "current-streak")?.value}</div>
                 <div className="text-sm text-gray-400">Current Streak</div>
               </div>
             </div>
