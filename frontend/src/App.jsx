@@ -7,6 +7,7 @@ import Timer from './pages/Timer.jsx';
 import Tasks from './pages/Tasks.jsx';
 import Analytics from './pages/Analytics.jsx';
 import TeamFocusRoom from './pages/TeamFocusRoom.jsx';
+import Settings from './pages/Settings.jsx';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
       <Route path="/timer" element={<Timer />} />
       <Route path="/tasks" element={<Tasks />} />
       <Route path="/analytics" element={<Analytics />} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="/join" element={<AuthJoin />} />
       <Route path="/team-room" element={<TeamFocusRoom />} />
       <Route path="*" element={<Navigate to="/" replace />} />

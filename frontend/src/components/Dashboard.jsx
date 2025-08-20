@@ -15,7 +15,7 @@ import {
   FiX,
   FiChevronRight,
 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import TopControls from './TopControls.jsx';
 
 // Simple avatar component
@@ -29,17 +29,20 @@ const Avatar = ({ src, alt }) => (
 );
 
 const Sidebar = ({ open, onClose, isMobile }) => {
+  const location = useLocation();
+  const current = location.pathname;
+
   const navTop = [
-    { key: 'dashboard', label: 'Dashboard', icon: <FiHome className="h-5 w-5" />, active: true },
-    { key: 'timer', label: 'Timer', icon: <FiClock className="h-5 w-5" /> },
-    { key: 'tasks', label: 'Tasks', icon: <FiCheckSquare className="h-5 w-5" /> },
-    { key: 'analytics', label: 'Analytics', icon: <FiBarChart2 className="h-5 w-5" /> },
-    { key: 'team', label: 'Team Room', icon: <FiUsers className="h-5 w-5" /> },
+    { key: 'dashboard', label: 'Dashboard', icon: <FiHome className="h-5 w-5" />, to: '/dashboard' },
+    { key: 'timer', label: 'Timer', icon: <FiClock className="h-5 w-5" />, to: '/timer' },
+    { key: 'tasks', label: 'Tasks', icon: <FiCheckSquare className="h-5 w-5" />, to: '/tasks' },
+    { key: 'analytics', label: 'Analytics', icon: <FiBarChart2 className="h-5 w-5" />, to: '/analytics' },
+    { key: 'team', label: 'Team Room', icon: <FiUsers className="h-5 w-5" />, to: '/team-room' },
   ];
 
   const navBottom = [
-    { key: 'settings', label: 'Settings', icon: <FiSettings className="h-5 w-5" /> },
-    { key: 'exit', label: 'Exit', icon: <FiLogOut className="h-5 w-5" /> },
+    { key: 'settings', label: 'Settings', icon: <FiSettings className="h-5 w-5" />, to: '/settings' },
+    { key: 'exit', label: 'Exit', icon: <FiLogOut className="h-5 w-5" />, to: '/' },
   ];
 
   const SidebarContent = (
@@ -58,62 +61,40 @@ const Sidebar = ({ open, onClose, isMobile }) => {
       </div>
       <nav aria-label="Primary Navigation" className="flex-1 overflow-y-auto px-4 py-6">
         <ul className="space-y-2">
-          {navTop.map((item) => (
-            <li key={item.key}>
-              <Link
-                to={
-                  item.key === 'timer'
-                    ? '/timer'
-                    : item.key === 'dashboard'
-                    ? '/dashboard'
-                    : item.key === 'tasks'
-                    ? '/tasks'
-                    : item.key === 'analytics'
-                    ? '/analytics'
-                    : item.key === 'team'
-                    ? '/team-room'
-                    : '#'
-                }
-                role="menuitem"
-                aria-current={item.active ? 'page' : undefined}
-                className={[
-                  'flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                  item.active
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-gray-400 hover:bg-gray-700/50 hover:text-white',
-                ].join(' ')}
-              >
-                {item.icon}
-                <span className="text-sm font-medium">{item.label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      
-      <div className="border-t border-gray-700 p-4">
-        <ul className="space-y-2">
-          {navBottom.map((item) => (
-            <li key={item.key}>
-              {item.key === 'exit' ? (
+          {navTop.map((item) => {
+            const active = current === item.to;
+            return (
+              <li key={item.key}>
                 <Link
-                  to="/"
+                  to={item.to}
                   role="menuitem"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-all hover:bg-gray-700/50 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-current={active ? 'page' : undefined}
+                  className={[
+                    'flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500',
+                    active ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-400 hover:bg-gray-700/50 hover:text-white',
+                  ].join(' ')}
                 >
                   {item.icon}
                   <span className="text-sm font-medium">{item.label}</span>
                 </Link>
-              ) : (
-                <a
-                  href="#"
-                  role="menuitem"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-all hover:bg-gray-700/50 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  {item.icon}
-                  <span className="text-sm font-medium">{item.label}</span>
-                </a>
-              )}
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      
+      <div className="mt-auto border-t border-gray-700 p-4">
+        <ul className="space-y-2">
+          {navBottom.map((item) => (
+            <li key={item.key}>
+              <Link
+                to={item.to}
+                role="menuitem"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-all hover:bg-gray-700/50 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {item.icon}
+                <span className="text-sm font-medium">{item.label}</span>
+              </Link>
             </li>
           ))}
         </ul>
