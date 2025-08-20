@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   FiClock,
   FiCheckCircle,
@@ -15,8 +15,10 @@ import {
   FiX,
   FiChevronRight,
 } from 'react-icons/fi';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import TopControls from './TopControls.jsx';
+import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Simple avatar component
 const Avatar = ({ src, alt }) => (
@@ -233,6 +235,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [completedTasks] = useState(0);
   const [totalTasks] = useState(0);
+  const navigate = useNavigate()
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
 
@@ -266,7 +269,7 @@ const Dashboard = () => {
     []
   );
 
-  const stats = [
+  const [stats, setStats] = useState([
     {
       id: 'total-time',
       value: '0m',
@@ -295,7 +298,35 @@ const Dashboard = () => {
       icon: <FiZap className="h-5 w-5" />,
       circleBg: 'bg-purple-600',
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    const fetchStats = async() => {
+        const res = await axios.get(`${API_URL}/stats`,{
+          withCredentials: true
+        })
+        const data = res.data; 
+        if(res.status === 200){
+          setStats((prev) =>  prev.map((stat) => {
+            if (stat.id === 'total-time') {
+              return { ...stat, value: `${data.totalFocusTime}m` };
+            }
+            if (stat.id === 'completed-sessions') {
+              return { ...stat, value: data.completedSessions.toString() };
+            }
+            if (stat.id === 'tasks-completed') {
+              return { ...stat, value: data.tasksCompleted.toString() };
+            }
+            if (stat.id === 'current-streak') {
+              return { ...stat, value: data.currentStreak.toString() };
+            }
+            return stat;
+          })
+        );
+        }
+    }
+    fetchStats();
+  },[]);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[var(--page-fg)]">
@@ -344,8 +375,7 @@ const Dashboard = () => {
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                 <div className="space-y-6 lg:col-span-2">
                   <QuickStartSection
-                    onStart={() => alert('Starting a 25-minute focus session...')}
-                    onManageTasks={() => (window.location.href = '/tasks')}
+                    onStart={() => navigate("/timer")}
                   />
                   <TodaysTasksSection completed={completedTasks} total={totalTasks} />
                 </div>

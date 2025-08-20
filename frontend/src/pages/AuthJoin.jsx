@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api.js';
+import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const TabButton = ({ active, children, onClick }) => (
   <button
@@ -46,7 +48,7 @@ const AuthJoin = () => {
     return '';
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     const v = validate();
@@ -56,21 +58,43 @@ const AuthJoin = () => {
     }
     setLoading(true);
     try {
-      // Placeholder API call for demo purposes
-      await new Promise((res) => setTimeout(res, 600));
-      // Alternatively: await api.post(tab === 'login' ? '/login' : '/signup', {...})
       if (tab === 'login') {
-        await login({ email: form.email, remember: form.remember });
+        const fetch = async () => {
+          const res = await axios.post(`${API_URL}/auth/login`, {
+            email: form.email,
+            password: form.password,
+          },{
+            withCredentials: true
+          });
+          alert(res.data.message);
+          if(res.status === 200){
+            navigate('/dashboard', { replace: true });
+          }
+        }
+        fetch();
       } else {
-        await signup({ name: form.name, email: form.email });
+        const fetch = async () => {
+          const res = await axios.post(`${API_URL}/auth/register`, {
+            email: form.email,
+            password: form.password,
+            name: form.name,
+          },{
+            withCredentials: true
+          });
+          alert(res.data.message);
+          if(res.status === 201){
+            navigate('/dashboard', { replace: true });
+          }
+        }
+        fetch();
       }
-      navigate('/dashboard', { replace: true });
     } catch (err) {
       setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#07070a] text-white">

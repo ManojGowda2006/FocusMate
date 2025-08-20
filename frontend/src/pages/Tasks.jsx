@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FiHome,
@@ -14,6 +14,9 @@ import {
   FiCheck,
   FiAlertCircle,
 } from 'react-icons/fi';
+import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL;
+import { format } from "date-fns";
 
 // Types via JSDoc for clarity
 /**
@@ -214,6 +217,7 @@ const TaskModal = ({ mode = 'add', initial, onClose, onSave }) => {
 };
 
 const TaskCard = ({ task, onToggleComplete, onEdit, onDelete, onChangePriority }) => {
+  const formattedDueDate = format(new Date(task.dueDate), "MMM d, yyyy");
   return (
     <div className="mb-4 rounded-xl bg-gray-900 p-4 transition-all duration-200 hover:bg-gray-800">
       <div className="flex items-start gap-3">
@@ -236,7 +240,7 @@ const TaskCard = ({ task, onToggleComplete, onEdit, onDelete, onChangePriority }
                 aria-label="Change priority"
                 className="rounded-md border border-gray-700 bg-gray-800 px-2 py-1 text-xs text-gray-300 focus:border-blue-500"
                 value={task.priority}
-                onChange={(e) => onChangePriority(task.id, e.target.value)}
+                onChange={(e) => onChangePriority(task._id, e.target.value)}
               >
                 <option value="high">High</option>
                 <option value="medium">Medium</option>
@@ -264,7 +268,7 @@ const TaskCard = ({ task, onToggleComplete, onEdit, onDelete, onChangePriority }
           <p className="mt-1 text-sm text-gray-400">{task.description}</p>
           <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
             <FiClock className="h-3.5 w-3.5" />
-            <span>Due: {typeof task.dueDate === 'string' ? task.dueDate : 'today'}</span>
+            <span>Due: {formattedDueDate}</span>
           </div>
         </div>
       </div>
@@ -274,53 +278,21 @@ const TaskCard = ({ task, onToggleComplete, onEdit, onDelete, onChangePriority }
 
 const TasksPage = () => {
   /** @type {[Task[], Function]} */
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: 'Complete project documentation',
-      description: 'Finish writing technical documentation for the new feature',
-      status: 'in-progress',
-      priority: 'high',
-      dueDate: 'today',
-      createdAt: new Date(),
-    },
-    {
-      id: 2,
-      title: 'Review team code submissions',
-      description: 'Code review for 3 pull requests pending approval',
-      status: 'in-progress',
-      priority: 'medium',
-      dueDate: 'tomorrow',
-      createdAt: new Date(),
-    },
-    {
-      id: 3,
-      title: 'Update website design mockups',
-      description: 'Create new design variations for the landing page',
-      status: 'in-progress',
-      priority: 'low',
-      dueDate: 'this week',
-      createdAt: new Date(),
-    },
-    {
-      id: 4,
-      title: 'Client meeting preparation',
-      description: 'Prepare presentation slides and agenda for client call',
-      status: 'completed',
-      priority: 'high',
-      dueDate: 'yesterday',
-      createdAt: new Date(),
-    },
-    {
-      id: 5,
-      title: 'Database optimization',
-      description: 'Optimize database queries for better performance',
-      status: 'open',
-      priority: 'medium',
-      dueDate: 'next week',
-      createdAt: new Date(),
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
+  
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const res = await axios.get(`${API_URL}/tasks`, {
+        withCredentials: true,  
+      });
+      if (res.status === 200) {
+        setTasks(res.data);
+      } else {
+        alert('Failed to fetch tasks:', res.data);
+      }
+    }
+    fetchTasks(); 
+  },[])
 
   const [activeTab, setActiveTab] = useState('all'); // all | in-progress | completed | overdue
   const [showAddModal, setShowAddModal] = useState(false);
@@ -352,24 +324,44 @@ const TasksPage = () => {
     );
   };
 
-  const handleSaveNew = (data) => {
+  const handleSaveNew = async(data) => {
+    const res = await axios.post(`${API_URL}/tasks`, data, {
+      withCredentials: true
+    })
+    if (res.status !== 201) {
+      alert('Failed to create task:', res.data);
+      return;
+    }
     setTasks((prev) => [{ id: Date.now(), ...data }, ...prev]);
     setShowAddModal(false);
   };
 
-  const handleSaveEdit = (data) => {
+  const handleSaveEdit = async(data) => {
+    const res =await axios.put(`${API_URL}/tasks/${data._id}`, data, {
+      withCredentials: true}
+    )
     setTasks((prev) => prev.map((t) => (t.id === data.id ? { ...t, ...data } : t)));
     setEditTask(null);
   };
 
   const handleDelete = (task) => {
     if (window.confirm('Delete this task?')) {
+      const res = axios.delete(`${API_URL}/tasks/${task._id}`, {
+        withCredentials: true,})
+
       setTasks((prev) => prev.filter((t) => t.id !== task.id));
     }
   };
 
-  const handleChangePriority = (id, priority) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, priority } : t)));
+  const handleChangePriority = async(id, priority) => {
+    const res = await axios.patch(`${API_URL}/tasks/${id}`, { priority }, {
+      withCredentials: true,
+    });
+    if (res.status !== 200) {
+      alert('Failed to update priority:', res.data);
+      return;
+    }
+    setTasks((prev) => prev.map((t) => (t._id === id ? { ...t, priority } : t)));
   };
 
   const TabButton = ({ id, label }) => {
@@ -456,7 +448,7 @@ const TasksPage = () => {
             <div>
               {filteredTasks.map((task) => (
                 <TaskCard
-                  key={task.id}
+                  key={task._id}
                   task={task}
                   onToggleComplete={toggleComplete}
                   onEdit={(t) => setEditTask(t)}
