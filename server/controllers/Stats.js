@@ -2,8 +2,8 @@ const User = require('../models/User');
 
 const getStats = async (req, res) => {
     try {
-    const user = await User.findById(req.params.id).select('totalFocusTime completedSessions tasksCompleted currentStreak');
-    res.json(user);
+    const user = await User.findById(req.user.id).select('totalFocusTime completedSessions tasksCompleted currentStreak');
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

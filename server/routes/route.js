@@ -15,10 +15,11 @@ router.post('/tasks', userAuth, createTask);
 router.get('/tasks', userAuth, getTasks);
 router.put('/tasks/:id', userAuth, updateTask);
 router.delete('/tasks/:id', userAuth, deleteTask);
+router.patch('/tasks/:id', userAuth, updateTask); 
 
 
 //Stats
-router.get('/stats/:id', userAuth, getStats);
+router.get('/stats', userAuth, getStats);
 router.put('/stats/:id', userAuth, updateStats);
 
 //Teams
