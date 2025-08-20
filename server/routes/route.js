@@ -5,10 +5,15 @@ const {signup, login} = require('../controllers/Auth');
 const userAuth = require('../middleware');
 const {getStats, updateStats} = require('../controllers/Stats');
 const {createTeam, getTeams, getTeamById, addMember, removeMember, updateTeam, deleteTeam} = require('../controllers/Team');
+const {sendUser, updateUser} = require('../controllers/User');
 
 //Authentication
 router.post('/auth/register', signup);
 router.post('/auth/login', login);
+
+//User
+router.get('/user', userAuth, sendUser);
+router.put('/user', userAuth, updateUser);
 
 //Tasks
 router.post('/tasks', userAuth, createTask);
