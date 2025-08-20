@@ -19,20 +19,10 @@ html, body, #root {
   height: 100%;
 }
 
-/* Light/Dark theme variables */
-.fm-theme-dark { 
-  --page-bg: #07070a; 
-  --page-fg: #ffffff; 
-  --panel-bg: #0f1113; 
-}
-.fm-theme-light { 
-  --page-bg: #f8fafc; 
-  --page-fg: #0b0b0d; 
-  --panel-bg: #ffffff; 
-}
+/* Light/Dark theme variables removed; default to dark variables from :root */
 
-/* Apply background and foreground to body */
-.fm-theme-dark body, .fm-theme-light body { 
+/* Apply background and foreground to body using :root variables */
+body { 
   background: var(--page-bg); 
   color: var(--page-fg);
 }

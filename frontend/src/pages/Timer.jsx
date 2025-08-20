@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { notify } from '../utils/notify';
 import {
   FiHome,
   FiClock,
@@ -67,8 +68,24 @@ const Timer = () => {
           if (mode === 'focus') {
             setSessionsToday((p) => p + 1);
             setTotalFocusTime((p) => p + 25);
+            notify('Focus complete', 'Great job! 5-minute break starting.', { sound: true });
+            // Transition to break and auto-start
+            setMode('break');
+            setIsRunning(false);
+            setTimeout(() => {
+              setTimeLeft(BREAK_DURATION);
+              setIsRunning(true);
+            }, 0);
+          } else {
+            notify('Break complete', 'Back to focus. 25-minute session starting.', { sound: true });
+            // Transition to focus and auto-start
+            setMode('focus');
+            setIsRunning(false);
+            setTimeout(() => {
+              setTimeLeft(FOCUS_DURATION);
+              setIsRunning(true);
+            }, 0);
           }
-          setIsRunning(false);
           return 0;
         }
         return prev - 1;
@@ -84,7 +101,18 @@ const Timer = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleStartPause = () => setIsRunning((r) => !r);
+  const handleStartPause = () => {
+    setIsRunning((r) => {
+      const next = !r;
+      if (next) {
+        notify(mode === 'focus' ? 'Focus started' : 'Break started',
+          mode === 'focus' ? 'Stay focused for 25 minutes.' : 'Relax for 5 minutes.',
+          { sound: true }
+        );
+      }
+      return next;
+    });
+  };
 
   const handleReset = () => {
     setIsRunning(false);
@@ -96,13 +124,20 @@ const Timer = () => {
     setMode(next);
     setIsRunning(false);
     setTimeLeft(next === 'focus' ? FOCUS_DURATION : BREAK_DURATION);
+    notify(next === 'focus' ? 'Focus mode' : 'Break mode', undefined, { sound: true });
   };
 
   return (
-    <div className="flex min-h-screen bg-black">
-      {/* Sidebar (w-64, bg-gray-900) */}
-      <aside className="flex w-64 shrink-0 flex-col bg-gray-900 text-gray-300">
-        <div className="p-6 text-xl font-bold text-blue-400">FocusMate</div>
+    <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[var(--page-fg)]">
+      {/* Background elements */}
+      <div className="bg-blob left" />
+      <div className="bg-blob right" />
+      <div className="floating-dots" />
+      
+      <div className="flex min-h-screen relative z-10">
+        {/* Sidebar (w-64, bg-gray-900) */}
+        <aside className="flex w-64 shrink-0 flex-col bg-gray-800/50 backdrop-blur text-[var(--page-fg)] border-r border-gray-700">
+        <Link to="/" className="p-6 text-xl font-bold text-blue-400">FocusMate</Link>
         <nav className="px-4" aria-label="Sidebar Navigation">
           <ul className="space-y-2">
             <li>
@@ -125,31 +160,31 @@ const Timer = () => {
               </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/tasks"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
               >
                 <FiCheckSquare className="h-5 w-5" />
                 <span className="text-sm font-medium">Tasks</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/analytics"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
               >
                 <FiBarChart2 className="h-5 w-5" />
                 <span className="text-sm font-medium">Analytics</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/team-room"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
               >
                 <FiUsers className="h-5 w-5" />
                 <span className="text-sm font-medium">Team</span>
-              </a>
+              </Link>
             </li>
           </ul>
           <div className="mt-6 border-t border-gray-800 pt-6">
@@ -164,13 +199,13 @@ const Timer = () => {
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/"
                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
                 >
                   <FiLogOut className="h-5 w-5" />
                   <span className="text-sm font-medium">Exit</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -248,6 +283,7 @@ const Timer = () => {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 };

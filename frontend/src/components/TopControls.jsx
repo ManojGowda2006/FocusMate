@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Moon, Sun } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext.jsx';
+import { Bell } from 'lucide-react';
+// Theme removed
 
 // Small helper to play a short chime using WebAudio (no file needed)
 const playChime = (frequency = 880, duration = 0.12) => {
@@ -22,7 +22,7 @@ const playChime = (frequency = 880, duration = 0.12) => {
 };
 
 const TopControls = () => {
-  const { theme, toggleTheme } = useTheme();
+
   const [permission, setPermission] = useState(
     typeof Notification !== 'undefined' ? Notification.permission : 'default'
   );
@@ -41,17 +41,6 @@ const TopControls = () => {
 
   return (
     <div className="flex items-center gap-3">
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={toggleTheme}
-        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-        className="flex items-center gap-2 rounded-full px-4 py-2 border border-white/10 bg-[#0f1113] text-sm font-medium hover:border-white/20 text-white"
-      >
-        {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-        <span className="hidden sm:block">{theme === 'dark' ? 'Light' : 'Dark'} Mode</span>
-      </motion.button>
-
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}

@@ -26,7 +26,7 @@ const COLOR_GRAY = '#374151';
 const Sidebar = () => {
   return (
     <aside className="flex w-64 shrink-0 flex-col bg-gray-900 text-gray-300">
-      <div className="p-6 text-xl font-bold text-blue-400">FocusMate</div>
+      <Link to="/" className="p-6 text-xl font-bold text-blue-400">FocusMate</Link>
       <nav className="px-4" aria-label="Sidebar Navigation">
         <ul className="space-y-2">
           <li>
@@ -67,13 +67,13 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <a
-              href="#"
+            <Link
+              to="/team-room"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
             >
               <FiUsers className="h-5 w-5" />
               <span className="text-sm font-medium">Team</span>
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
@@ -210,10 +210,16 @@ const Analytics = () => {
   );
 
   return (
-    <div className="flex min-h-screen bg-black">
-      <Sidebar />
+    <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[var(--page-fg)]">
+      {/* Background elements */}
+      <div className="bg-blob left" />
+      <div className="bg-blob right" />
+      <div className="floating-dots" />
+      
+      <div className="flex min-h-screen relative z-10">
+        <Sidebar />
 
-      <main className="flex min-h-screen flex-1 flex-col p-8">
+        <main className="flex min-h-screen flex-1 flex-col p-8">
         {/* Header */}
         <div className="mb-8 flex items-start justify-between">
           <div>
@@ -251,7 +257,7 @@ const Analytics = () => {
           <div className="rounded-xl bg-gray-900 p-6">
             <div className="flex items-start justify-between">
               <div>
-                <div className="text-2xl font-bold text-white">0</div>
+                <div className="text-2xl font-bold text-white">{analyticsData.completedSessions}</div>
                 <div className="mt-2 text-sm text-green-400">+20 +1.2%</div>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-600">
@@ -264,7 +270,7 @@ const Analytics = () => {
           <div className="rounded-xl bg-gray-900 p-6">
             <div className="flex items-start justify-between">
               <div>
-                <div className="text-2xl font-bold text-white">0</div>
+                <div className="text-2xl font-bold text-white">{analyticsData.tasksCompleted}</div>
                 <div className="mt-2 text-sm text-green-400">+20 +1.2%</div>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-yellow-600">
@@ -277,7 +283,7 @@ const Analytics = () => {
           <div className="rounded-xl bg-gray-900 p-6">
             <div className="flex items-start justify-between">
               <div>
-                <div className="text-2xl font-bold text-white">0</div>
+                <div className="text-2xl font-bold text-white">{analyticsData.currentStreak}</div>
                 <div className="mt-2 text-sm text-green-400">+20 0.0%</div>
               </div>
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-600">
@@ -380,6 +386,7 @@ const Analytics = () => {
           </div>
         </section>
       </main>
+      </div>
     </div>
   );
 };
