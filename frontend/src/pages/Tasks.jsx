@@ -36,8 +36,8 @@ const Sidebar = () => {
     { key: 'team', label: 'Team', icon: <FiUsers className="h-5 w-5" />, to: '/team-room' },
   ];
   const navBottom = [
-    { key: 'settings', label: 'Settings', icon: <FiSettings className="h-5 w-5" /> },
-    { key: 'exit', label: 'Exit', icon: <FiLogOut className="h-5 w-5" /> },
+    { key: 'settings', label: 'Settings', icon: <FiSettings className="h-5 w-5" />, to: '/settings' },
+    { key: 'exit', label: 'Exit', icon: <FiLogOut className="h-5 w-5" />, to: '/' },
   ];
 
   return (
@@ -69,15 +69,15 @@ const Sidebar = () => {
               {navBottom.map((item) => (
                 <li key={item.key}>
                   {item.key === 'exit' ? (
-                    <Link to="/" className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <Link to={item.to} className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                       {item.icon}
                       <span className="text-sm font-medium">{item.label}</span>
                     </Link>
                   ) : (
-                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <Link to={item.to} className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                       {item.icon}
                       <span className="text-sm font-medium">{item.label}</span>
-                    </button>
+                    </Link>
                   )}
                 </li>
               ))}
