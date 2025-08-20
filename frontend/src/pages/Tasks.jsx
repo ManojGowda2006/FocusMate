@@ -32,8 +32,8 @@ const Sidebar = () => {
     { key: 'dashboard', label: 'Dashboard', icon: <FiHome className="h-5 w-5" />, to: '/dashboard' },
     { key: 'timer', label: 'Timer', icon: <FiClock className="h-5 w-5" />, to: '/timer' },
     { key: 'tasks', label: 'Tasks', icon: <FiCheckSquare className="h-5 w-5" />, to: '/tasks', active: true },
-    { key: 'analytics', label: 'Analytics', icon: <FiBarChart2 className="h-5 w-5" />, to: '#' },
-    { key: 'team', label: 'Team', icon: <FiUsers className="h-5 w-5" />, to: '#' },
+    { key: 'analytics', label: 'Analytics', icon: <FiBarChart2 className="h-5 w-5" />, to: '/analytics' },
+    { key: 'team', label: 'Team', icon: <FiUsers className="h-5 w-5" />, to: '/team-room' },
   ];
   const navBottom = [
     { key: 'settings', label: 'Settings', icon: <FiSettings className="h-5 w-5" /> },
@@ -41,10 +41,12 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden w-64 shrink-0 bg-gray-900 text-gray-300 lg:block">
+    <aside className="hidden w-64 shrink-0 bg-gray-800/50 backdrop-blur border-r border-gray-700 text-gray-300 lg:block">
       <div className="flex h-full flex-col">
-        <div className="p-6 text-xl font-bold text-blue-400">FocusMate</div>
-        <nav className="flex-1 overflow-y-auto px-4">
+        <div className="p-6 border-b border-gray-700">
+          <Link to="/" className="text-xl font-bold text-blue-400 hover:text-blue-300 transition-colors">FocusMate</Link>
+        </div>
+        <nav className="flex-1 overflow-y-auto px-4 py-6">
           <ul className="space-y-2">
             {navTop.map((item) => (
               <li key={item.key}>
@@ -52,7 +54,7 @@ const Sidebar = () => {
                   to={item.to}
                   className={[
                     'flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                    item.active ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                    item.active ? 'bg-blue-600 text-white' : 'text-gray-400 hover:bg-gray-700/50 hover:text-white',
                   ].join(' ')}
                   aria-current={item.active ? 'page' : undefined}
                 >
@@ -66,10 +68,17 @@ const Sidebar = () => {
             <ul className="space-y-2">
               {navBottom.map((item) => (
                 <li key={item.key}>
-                  <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    {item.icon}
-                    <span className="text-sm font-medium">{item.label}</span>
-                  </button>
+                  {item.key === 'exit' ? (
+                    <Link to="/" className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      {item.icon}
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </Link>
+                  ) : (
+                    <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      {item.icon}
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -379,12 +388,18 @@ const TasksPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-black">
-      {/* Sidebar */}
-      <Sidebar />
+    <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-[var(--page-fg)]">
+      {/* Background elements */}
+      <div className="bg-blob left" />
+      <div className="bg-blob right" />
+      <div className="floating-dots" />
+      
+      <div className="flex min-h-screen relative z-10">
+        {/* Sidebar */}
+        <Sidebar />
 
-      {/* Main content */}
-      <div className="flex min-h-screen flex-1 flex-col p-6 lg:pl-8">
+        {/* Main content */}
+        <div className="flex min-h-screen flex-1 flex-col p-6 lg:pl-8">
         {/* Header */}
         <header>
           <h1 className="mb-2 text-3xl font-bold text-white">Tasks</h1>
@@ -452,11 +467,12 @@ const TasksPage = () => {
             </div>
           )}
         </section>
+        </div>
       </div>
 
       {showAddModal && (
-        <TaskModal mode="add" onClose={() => setShowAddModal(false)} onSave={handleSaveNew} />)
-      }
+        <TaskModal mode="add" onClose={() => setShowAddModal(false)} onSave={handleSaveNew} />
+      )}
 
       {editTask && (
         <TaskModal
