@@ -1,6 +1,7 @@
 import React from 'react';
 import GradientButton from './GradientButton.jsx';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const textContainer = {
   hidden: { opacity: 0, y: 12 },
@@ -12,6 +13,7 @@ const textContainer = {
 };
 
 const HeroSection = ({ onGetStarted }) => {
+  const navigate = useNavigate();
   return (
     <section className="pt-8 pb-12 text-center">
       <motion.h1
@@ -41,7 +43,7 @@ const HeroSection = ({ onGetStarted }) => {
         transition={{ delay: 0.3, duration: 0.5 }}
         className="mt-8 flex justify-center"
       >
-        <GradientButton onClick={onGetStarted}>Get Started</GradientButton>
+        <GradientButton onClick={(onGetStarted)}>Get Started</GradientButton>
       </motion.div>
     </section>
   );

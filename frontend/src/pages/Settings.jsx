@@ -129,6 +129,7 @@ const Settings = () => {
         `${CLOUDINARY_API}`,
         formData
       );
+      console.log("Image uploaded successfully:", res.data);
       setImage(res.data.secure_url );
     } catch (err) {
       console.error("Image upload failed", err);
@@ -141,7 +142,7 @@ const onImageChange = async (e) => {
   try {
     setSaving(true);
     const url = await handleImageUpload(file);
-    setImage(url); // update state with hosted Cloudinary URL
+    // setImage(url); // update state with hosted Cloudinary URL
   } catch (err) {
     console.error("Image upload failed:", err);
   } finally {
@@ -157,9 +158,10 @@ const onSave = async (e) => {
   setSaving(true);
   try {
     const payload = { name, email, image }
+    console.log("Saving profile:", payload);
 
     // Save to backend
-    await axios.post(`${API_URL}/user`, payload, { withCredentials: true });
+    await axios.put(`${API_URL}/user`, payload, { withCredentials: true });
 
     // Also persist locally if you want
     writeJSON(PROFILE_KEY, payload.profile);

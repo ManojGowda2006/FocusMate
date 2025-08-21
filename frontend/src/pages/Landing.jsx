@@ -391,7 +391,7 @@ const Landing = () => {
         <main className="relative z-10">
           {/* Hero Section */}
           <div className="px-6 pb-20">
-            <HeroSection onGetStarted={() => navigate('/dashboard')} />
+            <HeroSection onGetStarted={() => navigate('/join')} />
           </div>
 
           {/* Enhanced Feature Sections */}
