@@ -1,17 +1,21 @@
 <div align="center">
 
 # 🎯 FocusMate
-
 ### *Your Ultimate Deep Work Companion*
 
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.10-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.0.0-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-8.17.2-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express.js-5.1.0-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 
-*A modern, dark-themed productivity web app designed to help you achieve deep work through structured focus sessions, task management, and insightful analytics.*
+*A modern, dark-themed productivity web app designed to help you achieve deep work through structured focus sessions, task management, team collaboration, and insightful analytics.*
 
 [🚀 Live Demo](#) • [📖 Documentation](#getting-started) • [🐛 Report Bug](#) • [💡 Request Feature](#)
+
+![FocusMate Preview](https://via.placeholder.com/800x400/0f172a/ffffff?text=FocusMate+Dashboard)
 
 </div>
 
@@ -52,11 +56,31 @@
 </td>
 <td width="50%">
 
+### 👥 **Team Collaboration**
+- 🏢 **Team creation** and management
+- 👤 **Member management** with role-based access
+- 📊 **Team productivity tracking**
+- 🎯 **Collaborative focus sessions**
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
 ### 📊 **Analytics Dashboard**
 - 📈 **Interactive charts** with Recharts
 - ⏱️ **Focus time tracking**
 - 🎯 **Progress visualization**
 - 📤 **Data export** functionality
+
+</td>
+<td width="50%">
+
+### 🔐 **Secure Authentication**
+- 🛡️ **JWT-based authentication** with HTTP-only cookies
+- 🔒 **Password hashing** with bcryptjs
+- 👤 **User profile management**
+- 🚪 **Protected routes** and middleware
 
 </td>
 </tr>
@@ -70,9 +94,15 @@
 
 | Frontend | Styling | Animation | Charts | Tools |
 |----------|---------|-----------|--------|-------|
-| ![React](https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=white) | ![Tailwind](https://img.shields.io/badge/Tailwind-38B2AC?style=flat&logo=tailwind-css&logoColor=white) | ![Framer](https://img.shields.io/badge/Framer_Motion-0055FF?style=flat&logo=framer&logoColor=white) | ![Recharts](https://img.shields.io/badge/Recharts-FF6B6B?style=flat&logo=chart.js&logoColor=white) | ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white) |
-| ![Router](https://img.shields.io/badge/React_Router-CA4245?style=flat&logo=react-router&logoColor=white) | ![PostCSS](https://img.shields.io/badge/PostCSS-DD3A0A?style=flat&logo=postcss&logoColor=white) | ![Lucide](https://img.shields.io/badge/Lucide-000000?style=flat&logo=lucide&logoColor=white) | | ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat&logo=eslint&logoColor=white) |
-| ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=axios&logoColor=white) | | ![React Icons](https://img.shields.io/badge/React_Icons-61DAFB?style=flat&logo=react&logoColor=white) | | ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=prettier&logoColor=white) |
+| ![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react&logoColor=white) | ![Tailwind](https://img.shields.io/badge/Tailwind-3.4.10-38B2AC?style=flat&logo=tailwind-css&logoColor=white) | ![Framer](https://img.shields.io/badge/Framer_Motion-11.0.0-0055FF?style=flat&logo=framer&logoColor=white) | ![Recharts](https://img.shields.io/badge/Recharts-2.12.7-FF6B6B?style=flat&logo=chart.js&logoColor=white) | ![Vite](https://img.shields.io/badge/Vite-5.4.2-646CFF?style=flat&logo=vite&logoColor=white) |
+| ![Router](https://img.shields.io/badge/React_Router-6.26.2-CA4245?style=flat&logo=react-router&logoColor=white) | ![PostCSS](https://img.shields.io/badge/PostCSS-8.4.45-DD3A0A?style=flat&logo=postcss&logoColor=white) | ![Lucide](https://img.shields.io/badge/Lucide_React-0.463.0-000000?style=flat&logo=lucide&logoColor=white) | ![Date-fns](https://img.shields.io/badge/Date_fns-4.1.0-770C56?style=flat&logo=javascript&logoColor=white) | ![ESLint](https://img.shields.io/badge/ESLint-9.9.0-4B32C3?style=flat&logo=eslint&logoColor=white) |
+| ![Axios](https://img.shields.io/badge/Axios-1.11.0-5A29E4?style=flat&logo=axios&logoColor=white) | ![Autoprefixer](https://img.shields.io/badge/Autoprefixer-10.4.20-DD3735?style=flat&logo=autoprefixer&logoColor=white) | ![React Icons](https://img.shields.io/badge/React_Icons-5.5.0-61DAFB?style=flat&logo=react&logoColor=white) | | ![Prettier](https://img.shields.io/badge/Prettier-3.3.3-F7B93E?style=flat&logo=prettier&logoColor=white) |
+
+### Backend Technologies
+| Server | Database | Authentication | Security | Tools |
+|--------|----------|----------------|----------|-------|
+| ![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=flat&logo=node.js&logoColor=white) | ![MongoDB](https://img.shields.io/badge/MongoDB-8.17.2-47A248?style=flat&logo=mongodb&logoColor=white) | ![JWT](https://img.shields.io/badge/JWT-9.0.2-000000?style=flat&logo=jsonwebtokens&logoColor=white) | ![bcryptjs](https://img.shields.io/badge/bcryptjs-3.0.2-4A90E2?style=flat&logo=security&logoColor=white) | ![Nodemon](https://img.shields.io/badge/Nodemon-3.1.10-76D04B?style=flat&logo=nodemon&logoColor=white) |
+| ![Express](https://img.shields.io/badge/Express.js-5.1.0-000000?style=flat&logo=express&logoColor=white) | ![Mongoose](https://img.shields.io/badge/Mongoose-8.17.2-880000?style=flat&logo=mongoose&logoColor=white) | ![Cookie Parser](https://img.shields.io/badge/Cookie_Parser-1.4.7-FFA500?style=flat&logo=cookie&logoColor=white) | ![CORS](https://img.shields.io/badge/CORS-2.8.5-FF6B6B?style=flat&logo=cors&logoColor=white) | ![dotenv](https://img.shields.io/badge/dotenv-17.2.1-ECD53F?style=flat&logo=dotenv&logoColor=black) |
 
 </div>
 
@@ -81,14 +111,18 @@
 ## 🏗️ Project Structure
 
 ```
-🎯 Focus Mate/
+🎯 FocusMate/
 ├── 📁 frontend/
 │   ├── 📄 index.html
 │   ├── 📦 package.json
 │   ├── ⚙️ vite.config.js
 │   ├── 🎨 tailwind.config.cjs
+│   ├── 🔧 .eslintrc.cjs
+│   ├── 💅 .prettierrc.json
+│   ├── 🌍 .env
 │   ├── 📁 public/
 │   │   └── 🖼️ favicon.ico
+│   ├── 📁 dist/
 │   └── 📁 src/
 │       ├── 🚀 main.jsx
 │       ├── 🎯 App.jsx
@@ -107,16 +141,39 @@
 │       │   ├── 🎴 FeatureCard.jsx
 │       │   ├── 🎯 FocusMateDashboard.jsx
 │       │   ├── 🌈 GradientButton.jsx
-│       │   └── 📝 SignupModal.jsx
+│       │   ├── 📝 SignupModal.jsx
+│       │   └── 🔐 ModalAuth.jsx
 │       └── 📁 pages/
 │           ├── 🏠 Landing.jsx
 │           ├── 📊 Dashboard.jsx
 │           ├── ⏰ Timer.jsx
 │           ├── ✅ Tasks.jsx
 │           ├── 📈 Analytics.jsx
+│           ├── ⚙️ Settings.jsx
 │           ├── 🔐 AuthJoin.jsx
 │           └── 👥 TeamFocusRoom.jsx
-└── 📖 README.md
+├── 📁 server/
+│   ├── 📦 package.json
+│   ├── 🚀 server.js
+│   ├── 🌍 .env
+│   ├── 🛡️ middleware.js
+│   ├── 📁 dataBase/
+│   │   └── 🗄️ database.js
+│   ├── 📁 models/
+│   │   ├── 👤 User.js
+│   │   ├── ✅ Task.js
+│   │   └── 👥 TeamSchema.js
+│   ├── 📁 controllers/
+│   │   ├── 🔐 Auth.js
+│   │   ├── 👤 User.js
+│   │   ├── ✅ Task.js
+│   │   ├── 👥 Team.js
+│   │   └── 📊 Stats.js
+│   └── 📁 routes/
+│       └── 🛣️ route.js
+├── 📖 README.md
+├── 🤝 Collaboration.md
+└── 🎨 design.md
 ```
 
 ---
@@ -125,22 +182,53 @@
 
 ### 📋 Prerequisites
 
-- 📦 **Node.js** 18+ 
-- 🔧 **npm** or **yarn**
+- 📦 **Node.js** 18+ ([Download](https://nodejs.org/))
+- 🗄️ **MongoDB** Atlas account or local MongoDB
+- 🔧 **npm** or **yarn** package manager
+- 🌐 Modern web browser with JavaScript enabled
 
 ### ⚡ Quick Start
 
+#### 1️⃣ Clone the Repository
 ```bash
 # 📥 Clone the repository
 git clone https://github.com/yourusername/focusmate.git
 
-# 📂 Navigate to frontend directory
-cd "Focus Mate/frontend"
+# 📂 Navigate to project directory
+cd FocusMate
+```
 
-# 📦 Install dependencies
+#### 2️⃣ Backend Setup
+```bash
+# 📂 Navigate to server directory
+cd server
+
+# 📦 Install backend dependencies
 npm install
 
-# 🚀 Start development server
+# 🔧 Create environment file (.env)
+# CLIENT_URL="http://localhost:5173"
+# NODE_ENV="development"
+# DB_URL="your-mongodb-connection-string"
+# JWT_SECRET="your-jwt-secret-key"
+
+# 🚀 Start the backend server
+npm start
+```
+
+#### 3️⃣ Frontend Setup
+```bash
+# 📂 Navigate to frontend directory (in new terminal)
+cd frontend
+
+# 📦 Install frontend dependencies
+npm install
+
+# 🔧 Create environment file (.env)
+# VITE_API_URL="http://localhost:3000/api"
+# VITE_CLOUDINARY_URL="your-cloudinary-url" (optional)
+
+# 🚀 Start the development server
 npm run dev
 
 # 🌐 Open http://localhost:5173 in your browser
@@ -148,24 +236,76 @@ npm run dev
 
 ### 🏗️ Build for Production
 
+#### Frontend Build
 ```bash
-# 🔨 Build the project
+# 📂 In frontend directory
 npm run build
 
 # 👀 Preview production build
 npm run preview
 ```
 
+#### Backend Production
+```bash
+# 📂 In server directory
+NODE_ENV=production npm start
+```
+
 ---
 
 ## 📜 Available Scripts
 
+### Frontend Scripts
 | Command | Description | Icon |
 |---------|-------------|------|
-| `npm run dev` | Start Vite development server | 🚀 |
-| `npm run build` | Build production assets | 🔨 |
-| `npm run preview` | Preview production build | 👀 |
+| `npm run dev` | Start Vite development server (http://localhost:5173) | 🚀 |
+| `npm run build` | Build production assets to `dist/` | 🔨 |
+| `npm run preview` | Preview production build locally | 👀 |
 | `npm run lint` | Lint codebase with ESLint | 🔍 |
+
+### Backend Scripts
+| Command | Description | Icon |
+|---------|-------------|------|
+| `npm start` | Start Express server (http://localhost:3000) | 🚀 |
+| `npm test` | Run test suite (when implemented) | 🧪 |
+
+---
+
+## 🗺️ API Endpoints
+
+
+
+### 👤 User Routes
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/api/user` | Get current user profile | ✅ |
+| `PUT` | `/api/user` | Update user profile | ✅ |
+
+### ✅ Task Routes
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/api/tasks` | Create new task | ✅ |
+| `GET` | `/api/tasks` | Get user's tasks | ✅ |
+| `PUT` | `/api/tasks/:id` | Update specific task | ✅ |
+| `PATCH` | `/api/tasks/:id` | Partial task update | ✅ |
+| `DELETE` | `/api/tasks/:id` | Delete specific task | ✅ |
+
+### 📊 Statistics Routes
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/api/stats` | Get user statistics | ✅ |
+| `PUT` | `/api/stats/:id` | Update user statistics | ✅ |
+
+### 👥 Team Routes
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/api/teams` | Create new team | ✅ |
+| `GET` | `/api/teams` | Get user's teams | ✅ |
+| `GET` | `/api/teams/:id` | Get specific team | ✅ |
+| `POST` | `/api/teams/:id` | Add team member | ✅ |
+| `DELETE` | `/api/teams/remove/:id` | Remove team member | ✅ |
+| `PUT` | `/api/teams/:id` | Update team details | ✅ |
+| `DELETE` | `/api/teams/:id` | Delete team | ✅ |
 
 ---
 
@@ -178,6 +318,7 @@ npm run preview
 | `/timer` | Timer | Pomodoro interface | ⏰ |
 | `/tasks` | Tasks | Task management CRUD | ✅ |
 | `/analytics` | Analytics | Charts & insights | 📈 |
+| `/settings` | Settings | User preferences | ⚙️ |
 | `/join` | AuthJoin | Login/Signup forms | 🔐 |
 | `/team-room` | TeamFocusRoom | Team collaboration | 👥 |
 
@@ -215,9 +356,9 @@ npm run preview
 ## 💾 State Management
 
 ### 🔐 Authentication
-- `AuthContext.jsx` provides mock authentication
-- 👤 User session management (frontend-only)
-- 🔄 Ready for backend integration
+- `AuthContext.jsx` provides JWT-based authentication
+- 👤 User session management with HTTP-only cookies
+- 🔄 Protected routes with middleware
 
 ### ⏰ Timer State
 - 💾 **localStorage** persistence (`focusmate_timer_state_v1`)
@@ -225,7 +366,7 @@ npm run preview
 - 📊 **Session tracking** and statistics
 
 ### ✅ Tasks
-- 🧠 **In-memory** storage (ready for backend)
+- 🗄️ **MongoDB** storage with full CRUD operations
 - 🏷️ **Priority levels** and status management
 - 🔍 **Filtering** and organization features
 
@@ -234,7 +375,7 @@ npm run preview
 ## 📊 Analytics Features
 
 - 📈 **Recharts integration** (Bar, Line, Pie charts)
-- 🔄 **Live data simulation** with intervals
+- 🔄 **Real-time data** from MongoDB
 - 📤 **JSON export** functionality
 - 📊 **Focus time visualization**
 - 🎯 **Progress tracking**
@@ -271,7 +412,15 @@ npm run build  # Creates frontend/dist/
 
 ### 🔧 Environment Variables
 ```bash
-VITE_API_BASE_URL=https://your-api.com
+# Frontend
+VITE_API_URL=http://localhost:3000/api
+VITE_CLOUDINARY_URL=your-cloudinary-url
+
+# Backend
+CLIENT_URL=http://localhost:5173
+NODE_ENV=development
+DB_URL=your-mongodb-connection-string
+JWT_SECRET=your-jwt-secret-key
 ```
 
 ---
@@ -279,8 +428,8 @@ VITE_API_BASE_URL=https://your-api.com
 ## 🗺️ Roadmap
 
 ### 🔜 Coming Soon
-- [ ] 🔐 **JWT Authentication** with protected routes
-- [ ] 💾 **Backend Integration** for data persistence
+- [ ] 🔐 **Enhanced JWT Authentication** with refresh tokens
+- [ ] 💾 **Real-time synchronization** across devices
 - [ ] 👥 **Real-time Team Rooms** with WebSocket
 - [ ] 📱 **PWA Support** with offline capabilities
 - [ ] 🌅 **Light Theme** toggle option
@@ -317,8 +466,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### 🌟 Star this repo if you found it helpful!
 
-**Made with ❤️ by [Your Name](https://github.com/yourusername)**
+**Made with ❤️ by [Kalvium Project](https://github.com/yourusername)**
 
 [⬆ Back to Top](#-focusmate)
 
 </div>
+
