@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const User = new mongoose.Schema({
     name: {
@@ -18,6 +19,10 @@ const User = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    image:{
+        type: String,
+        default: `${process.env.DEFAULT_PROFILE_PIC }`,
     },
     totalFocusTime: { type: Number, default: 0 }, 
     completedSessions: { type: Number, default: 0 },
