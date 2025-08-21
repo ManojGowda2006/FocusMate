@@ -13,7 +13,7 @@
 
 *A modern, dark-themed productivity web app designed to help you achieve deep work through structured focus sessions, task management, team collaboration, and insightful analytics.*
 
-[🚀 Live Frontend](https://focusmate25.netlify.app) • [🛠️ Backend API](https://focusmate-6jvj.onrender.com) • [📖 Documentation](#getting-started) • [🐛 Report Bug](#) • [💡 Request Feature](#)
+[🚀 Live Frontend](https://focusmate25.netlify.app) • [🛠️ Backend API](https://focusmate-6jvj.onrender.com) • [🎨 Figma Prototype](https://www.figma.com/proto/ksczguqzAikfA2AAfQjo76/FocusMate?node-id=0-1&t=hOsfMScd4NWTty0r-1) • [📖 Documentation](#getting-started) • [🐛 Report Bug](#) • [💡 Request Feature](#)
 
 ![FocusMate Preview](https://via.placeholder.com/800x400/0f172a/ffffff?text=FocusMate+Dashboard)
 
@@ -271,6 +271,7 @@ NODE_ENV=production npm start
 
 ---
 
+## 🗺️ API Endpoints
 
 
 
