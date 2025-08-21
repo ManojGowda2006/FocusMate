@@ -23,57 +23,73 @@ Users run timed focus sessions with short/long breaks, attach sessions to tasks,
 ### 3.1 Frontend (React)
 
 ```bash
-  src/
-  ├── components/
-  │    ├── Navbar.jsx
-  │    ├── AuthForm.jsx
-  │    ├── TaskList.jsx
-  │    ├── TaskCard.jsx
-  │    ├── PomodoroTimer.jsx
-  │    ├── Dashboard.jsx
-  │    └── AnalyticsChart.jsx
-  │
-  ├── pages/
-  │    ├── Landing.jsx
-  │    ├── Login.jsx
-  │    ├── Signup.jsx
-  │    ├── Dashboard.jsx
-  │    └── Settings.jsx
-  │
-  ├── context/
-  │    └── AuthContext.jsx
-  │
-  ├── services/
-  │    └── api.js   // axios instance for backend calls
-  │
-  ├── utils/
-  │    └── timer.js // helper for timer persistence
-  │
-  └── App.jsx
+  frontend/
+├── index.html
+├── package.json
+├── vite.config.js
+├── tailwind.config.cjs
+├── .eslintrc.cjs
+├── .prettierrc.json
+├── .env
+├── public/
+│   └── favicon.ico
+├── dist/                # build output
+└── src/
+    ├── main.jsx
+    ├── App.jsx
+    ├── index.css
+    │
+    ├── utils/
+    │   ├── api.js        # axios instance
+    │   └── notify.js     # toast/notification helpers
+    │
+    ├── components/
+    │   ├── Dashboard.jsx
+    │   ├── TopControls.jsx
+    │   ├── Navbar.jsx
+    │   ├── HeroSection.jsx
+    │   ├── FeatureCard.jsx
+    │   ├── FocusMateDashboard.jsx
+    │   ├── GradientButton.jsx
+    │   ├── SignupModal.jsx
+    │   └── ModalAuth.jsx
+    │
+    └── pages/
+        ├── Landing.jsx
+        ├── Dashboard.jsx
+        ├── Timer.jsx
+        ├── Tasks.jsx
+        ├── Analytics.jsx
+        ├── Settings.jsx
+        ├── AuthJoin.jsx
+        └── TeamFocusRoom.jsx
+
 
 ### 3.2 Backend (Node.js + Express)
-    backend/
-    ├── models/
-    │    ├── User.js
-    │    └── Task.js
-    │
-    ├── routes/
-    │    ├── authRoutes.js
-    │    ├── taskRoutes.js
-    │    └── pomodoroRoutes.js
-    │
-    ├── controllers/
-    │    ├── authController.js
-    │    ├── taskController.js
-    │    └── pomodoroController.js
-    │
-    ├── middleware/
-    │    └── authMiddleware.js
-    │
-    ├── config/
-    │    └── db.js
-    │
-    └── server.js
+  server/
+├── package.json
+├── server.js
+├── .env
+├── middleware.js
+│
+├── dataBase/
+│   └── database.js
+│
+├── models/
+│   ├── User.js
+│   ├── Task.js
+│   └── TeamSchema.js
+│
+├── controllers/
+│   ├── Auth.js
+│   ├── User.js
+│   ├── Task.js
+│   ├── Team.js
+│   └── Stats.js
+│
+└── routes/
+    └── route.js
+
 
 ```
 ---
